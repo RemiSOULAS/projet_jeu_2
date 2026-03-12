@@ -1,9 +1,17 @@
 #include "../head/GameState.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 GameState state = {.map = NULL, .size = 0};
-void create_empty_game_state (GameState* state, int size){}
-void set_map_value (GameState* state, int x, int y, Color value){}
+void GR8_create_empty_game_state (GameState* state, int size)
+{
+	state->map=(Color*) malloc(size*size*sizeof(Color));
+	state->size=size;
+}
+void set_map_value (GameState* state, int x, int y, Color value)
+{
+	state -> map[y * state -> size + x]=value;
+}
 Color get_map_value (GameState* state, int x, int y){
 	if (state -> map == NULL || x > state -> size || y > state -> size || x < 0 || y < 0)
 	{
@@ -12,7 +20,31 @@ Color get_map_value (GameState* state, int x, int y){
 	}
 	return state -> map[y * state -> size + x];
 }
-void fill_map(GameState* map){}
-int main(int argc, char** argv){
+
+void fill_map(GameState* map)
+{	
+	srand(time(NULL));
+	int nb_color=7;
+	for(int i=1;i<=(map->size*map->size);i++)
+	{
+		int indice = (rand() % nb_color)+3;
+		int y=i/(map->size);
+		int x=i%(map->size);
+
+		set_map_value(map,x,y,indice);
+	
+	}
+	set_map_value(map,0,map->size-1,1);
+	set_map_value(map,map->size-1,0,2);
+
 }
+int main(int argc, char** argv)
+{
+	
+	GR8_create_empty_game_state(&state, 5);
+	fill_map(&state);
+	int test=get_map_value(&state,0,2);
+	printf("%i\n",test);
+}
+
 

@@ -21,7 +21,7 @@ typedef struct GameState{
 } GameState;
 
 
-void create_empty_game_state (GameState* state, int size);
+void GR8_create_empty_game_state (GameState* state, int size);
 void set_map_value (GameState* state, int x, int y, Color value);
 Color get_map_value (GameState* state, int x, int y);
 void fill_map(GameState* state);

@@ -45,18 +45,58 @@ void affiche(GameState* state)
 	{
 		for(int j=0;j<state->size-1;j++)
 		{
-			printf("%i",get_map_value(state,j,i));
+			printf("%i %s",get_map_value(state,j,i)," ");
 		}
 		printf("%i\n",get_map_value(state,state->size-1,i));
 	}
 }
+
+void maj_coup(GameState* state, int joueur, int couleur)
+{
+	int c=0;
+    for(int i = 0; i < state->size; i++)
+    {
+        for(int j = 0; j < state->size; j++)
+        {
+            if(get_map_value(state,j,i) == couleur)
+            {
+                if(j+1 < state->size && get_map_value(state,j+1,i) == joueur){
+                    set_map_value(state,j,i,joueur);
+					c++;}
+					
+
+                else if(j-1 >= 0 && get_map_value(state,j-1,i) == joueur){
+                    set_map_value(state,j,i,joueur);
+					c++;}
+
+                else if(i+1 < state->size && get_map_value(state,j,i+1) == joueur){
+                    set_map_value(state,j,i,joueur);
+					c++;
+				}
+
+                else if(i-1 >= 0 && get_map_value(state,j,i-1) == joueur){
+                    set_map_value(state,j,i,joueur);
+					c++;}
+            }
+        }
+    }
+	if(c>0){
+		maj_coup(state,joueur,couleur);
+	}
+}
+
+
 int main(int argc, char** argv)
 {
 	
-	GR8_create_empty_game_state(&state, 4);
+	GR8_create_empty_game_state(&state, 5);
 	fill_map(&state);
 	//int test=get_map_value(&state,0,2);
 	//printf("%i\n",test);
+	
+	affiche(&state);
+	
+	maj_coup(&state,1,5);
 	affiche(&state);
 }
 

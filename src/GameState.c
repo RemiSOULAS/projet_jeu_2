@@ -25,7 +25,7 @@ void fill_map(GameState* map)
 {	
 	srand(time(NULL));
 	int nb_color=7;
-	for(int i=1;i<=(map->size*map->size);i++)
+	for(int i=0;i<=(map->size*map->size);i++)
 	{
 		int indice = (rand() % nb_color)+3;
 		int y=i/(map->size);
@@ -38,13 +38,26 @@ void fill_map(GameState* map)
 	set_map_value(map,map->size-1,0,2);
 
 }
+
+void affiche(GameState* state)
+{
+	for(int i=0;i<state->size;i++)
+	{
+		for(int j=0;j<state->size-1;j++)
+		{
+			printf("%i",get_map_value(state,j,i));
+		}
+		printf("%i\n",get_map_value(state,state->size-1,i));
+	}
+}
 int main(int argc, char** argv)
 {
 	
-	GR8_create_empty_game_state(&state, 5);
+	GR8_create_empty_game_state(&state, 4);
 	fill_map(&state);
-	int test=get_map_value(&state,0,2);
-	printf("%i\n",test);
+	//int test=get_map_value(&state,0,2);
+	//printf("%i\n",test);
+	affiche(&state);
 }
 
 

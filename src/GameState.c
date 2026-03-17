@@ -85,19 +85,60 @@ void maj_coup(GameState* state, int joueur, int couleur)
 	}
 }
 
+int is_finish(GameState* state){
+
+	int c1 = 0;
+	int c2 = 0;
+	int moitie;
+	if(state->size%2==0){
+		moitie = state->size*state->size/2;
+	}
+	else {
+		moitie = state->size*state->size/2+1;
+	}
+
+	for(int i=0;i<state->size;i++)
+	{
+		for(int j=0;j<state->size;j++)
+		{
+			if(get_map_value(state,i,j)==1){
+				c1++;
+			}
+			if(get_map_value(state,i,j)==1){
+				c2++;
+			}
+		}
+		
+	}
+	if(c1>= moitie){
+		return 1;
+	}
+
+	if(c2>=moitie){
+		return 2;
+	}
+
+	return 0;
+}
 
 int main(int argc, char** argv)
 {
 	
-	GR8_create_empty_game_state(&state, 5);
+	GR8_create_empty_game_state(&state, 4);
 	fill_map(&state);
-	//int test=get_map_value(&state,0,2);
-	//printf("%i\n",test);
+
 	
 	affiche(&state);
-	
+	set_map_value(&state,0,1,5);
+	set_map_value(&state,1,2,5);
+	set_map_value(&state,0,0,5);
+	set_map_value(&state,1,1,5);
+	set_map_value(&state,1,3,5);
+	set_map_value(&state,0,2,5);
 	maj_coup(&state,1,5);
+	
 	affiche(&state);
+	printf("%i\n",is_finish(&state));
 }
 
 

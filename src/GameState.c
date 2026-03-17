@@ -118,6 +118,61 @@ int is_finish(GameState* state){
 		return 2;
 	}
 
+	int c=0;
+	for(int i = 0; i < state->size; i++)
+    {
+        for(int j = 0; j < state->size; j++)
+        {
+            if(get_map_value(state,j,i) == 1)
+            {
+                if(j+1 < state->size && get_map_value(state,j+1,i) != 1 && get_map_value(state,j+1,i) != 2 ){
+					c++;}
+					
+
+                else if(j-1 >= 0 && get_map_value(state,j-1,i) != 1 && get_map_value(state,j-1,i) != 2 ){
+					c++;}
+
+                else if(i+1 < state->size && get_map_value(state,j,i+1) != 1 && get_map_value(state,j,i+1) != 2 ){
+					c++;
+				}
+
+                else if(i-1 >= 0 && get_map_value(state,j,i-1) != 1 && get_map_value(state,j,i-1) != 2 ){
+					c++;}
+            }
+        }
+    }
+	if (c == 0){
+		return 2; 
+	}
+
+	c=0;
+
+	for(int i = 0; i < state->size; i++)
+    {
+        for(int j = 0; j < state->size; j++)
+        {
+            if(get_map_value(state,j,i) == 2)
+            {
+                if(j+1 < state->size && get_map_value(state,j+1,i) != 1 && get_map_value(state,j+1,i) != 2 ){
+					c++;}
+					
+
+                else if(j-1 >=0 && get_map_value(state,j-1,i) != 1 && get_map_value(state,j-1,i) != 2 ){
+					c++;}
+
+                else if(i+1 < state->size && get_map_value(state,j,i+1) != 1 && get_map_value(state,j,i+1) != 2 ){
+					c++;
+				}
+
+                else if(i-1 >=0 && get_map_value(state,j,i-1) != 1 && get_map_value(state,j,i-1) != 2 ){
+					c++;}
+            }
+        }
+    }
+	if (c == 0){
+		return 1; 
+	}
+
 	return 0;
 }
 
@@ -129,12 +184,11 @@ int main(int argc, char** argv)
 
 	
 	affiche(&state);
-	set_map_value(&state,0,1,5);
-	set_map_value(&state,1,2,5);
-	set_map_value(&state,0,0,5);
-	set_map_value(&state,1,1,5);
-	set_map_value(&state,1,3,5);
-	set_map_value(&state,0,2,5);
+	set_map_value(&state,2,0,1);
+	set_map_value(&state,2,1,1);
+	set_map_value(&state,3,1,1);
+
+	
 	maj_coup(&state,1,5);
 	
 	affiche(&state);

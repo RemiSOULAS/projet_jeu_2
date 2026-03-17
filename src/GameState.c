@@ -176,6 +176,43 @@ int is_finish(GameState* state){
 	return 0;
 }
 
+void jouer_a_2(int size)
+{
+	GameState state = {.map = NULL, .size = 0};
+	GR8_create_empty_game_state(&state,size);
+	fill_map(&state);
+
+	printf("La partie commence !\n");
+
+	affiche(&state);
+
+	int coup;
+	while(is_finish(&state)==0)
+	{
+		printf("coup du joueur 1 : ");
+		scanf("%i", &coup);	
+		maj_coup(&state,1,coup);
+		affiche(&state);
+		if(is_finish(&state)!=0){
+			break;
+		}
+
+		printf("coup du joueur 2 : ");
+		scanf("%i", &coup);	
+		maj_coup(&state,2,coup);
+		affiche(&state);
+		
+	}
+
+	if(is_finish(&state)==1){
+		printf("le joueur 1 a gagné !\n");
+	}
+	else{
+		printf("le joueur 2 a gagné !\n");
+	}
+	
+}
+/*
 int main(int argc, char** argv)
 {
 	
@@ -193,6 +230,10 @@ int main(int argc, char** argv)
 	
 	affiche(&state);
 	printf("%i\n",is_finish(&state));
+
 }
-
-
+*/
+int main(int argc, char** argv)
+{
+	jouer_a_2(5);
+}

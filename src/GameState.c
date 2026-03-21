@@ -1,6 +1,6 @@
 #include "../head/GameState.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 GameState state = {.map = NULL, .size = 0};
 void GR8_create_empty_game_state (GameState* state, int size)
@@ -176,6 +176,57 @@ int is_finish(GameState* state){
 	return 0;
 }
 
+
+
+void jouer_IA(int size, int(*f)(void))
+{
+	GameState state = {.map = NULL, .size = 0};
+	GR8_create_empty_game_state(&state,size);
+	fill_map(&state);
+
+	printf("La partie commence !\n");
+
+	affiche(&state);
+
+	int coup;
+	while(is_finish(&state)==0)
+	{
+		printf("coup du joueur 1 : ");
+		scanf("%i", &coup);	
+		maj_coup(&state,1,coup);
+		affiche(&state);
+		if(is_finish(&state)!=0){
+			break;
+		}
+
+		printf("L'IA joue : \n");
+		maj_coup(&state,2,f());
+		affiche(&state);
+		
+	}
+
+	if(is_finish(&state)==1){
+		printf("le joueur 1 a gagné !\n");
+	}
+	else{
+		printf("le joueur 2 a gagné !\n");
+	}
+	
+}
+int IA_aleatoire(){
+	srand(time(NULL));
+	int nb_color=7;
+	int indice = (rand() % nb_color)+3;
+	return indice;
+}
+
+int IA_aleatoire_mieux(){
+	srand(time(NULL));
+	int nb_color=7;
+	int indice = (rand() % nb_color)+3;
+	return indice;
+}
+
 void jouer_a_2(int size)
 {
 	GameState state = {.map = NULL, .size = 0};
@@ -212,6 +263,7 @@ void jouer_a_2(int size)
 	}
 	
 }
+
 /*
 int main(int argc, char** argv)
 {
@@ -235,5 +287,5 @@ int main(int argc, char** argv)
 */
 int main(int argc, char** argv)
 {
-	jouer_a_2(5);
+	jouer_IA(5,IA_aleatoire);
 }

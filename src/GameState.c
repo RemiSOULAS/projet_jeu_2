@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 GameState state = {.map = NULL, .size = 0};
 void GR8_create_empty_game_state (GameState* state, int size)
@@ -267,7 +268,55 @@ int IA_aleatoire_mieux(GameState* state, int num_joueur){
 	}
 }
 
+GameState copie_GS(GameState* state){
 
+	GameState copie;
+
+	copie.size=state->size;
+	GameState* copie_p=&copie;
+	int size=copie.size;
+	copie_p->map=(Color*) malloc(size*size*sizeof(Color));
+	memcpy(copie_p->map, state->map, size*size*sizeof(Color) );
+
+	return copie;
+
+}
+
+int eval_score(GameState* state, int num_joueur){
+	int c=0;
+	for(int i = 0; i < state->size; i++)
+    {
+        for(int j = 0; j < state->size; j++)
+        {
+            if(get_map_value(state,j,i) == num_joueur)
+            {
+                c++;
+            }
+        }
+    }
+	
+
+    return c;
+}
+
+
+int IA_glouton(GameState* state, int num_joueur)
+{
+	int couleur=3;
+	int score =0;
+	for(int i=3; i<=9; i++){
+		GameState copie = copie_GS(state);
+		maj_coup(&copie,num_joueur,i);
+		if(eval_score(&copie,num_joueur)>score){
+			couleur=i;
+			score=eval_score(&copie,num_joueur);
+		}
+	}
+		
+	
+	
+	return couleur;
+}
 
 void jouer_a_2(int size)
 {
@@ -329,5 +378,6 @@ int main(int argc, char** argv)
 */
 int main(int argc, char** argv)
 {
-	jouer_IA(5,IA_aleatoire_mieux);
+	jouer_IA(8,IA_glouton);
+	
 }

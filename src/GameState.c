@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
 GameState state = {.map = NULL, .size = 0};
 void GR8_create_empty_game_state (GameState* state, int size)
 {
@@ -178,7 +179,7 @@ int is_finish(GameState* state){
 
 
 
-void jouer_IA(int size, int(*f)(void))
+void jouer_IA(int size, int(*f)(GameState*, int))
 {
 	GameState state = {.map = NULL, .size = 0};
 	GR8_create_empty_game_state(&state,size);
@@ -200,7 +201,7 @@ void jouer_IA(int size, int(*f)(void))
 		}
 
 		printf("L'IA joue : \n");
-		maj_coup(&state,2,f());
+		maj_coup(&state,2,f(&state, 2));
 		affiche(&state);
 		
 	}
@@ -213,19 +214,60 @@ void jouer_IA(int size, int(*f)(void))
 	}
 	
 }
-int IA_aleatoire(){
+int IA_aleatoire(GameState* state, int num_joueur){
 	srand(time(NULL));
 	int nb_color=7;
 	int indice = (rand() % nb_color)+3;
 	return indice;
 }
 
-int IA_aleatoire_mieux(){
-	srand(time(NULL));
-	int nb_color=7;
-	int indice = (rand() % nb_color)+3;
-	return indice;
+int is_adj(GameState* state,int nb_joueur, int couleur)
+{
+
+	
+
+	int c=0;
+	for(int i = 0; i < state->size; i++)
+    {
+        for(int j = 0; j < state->size; j++)
+        {
+            if(get_map_value(state,j,i) == nb_joueur)
+            {
+                if(j+1 < state->size && get_map_value(state,j+1,i) != 1 && get_map_value(state,j+1,i) == couleur ){
+					c++;}
+					
+
+                else if(j-1 >= 0 && get_map_value(state,j-1,i) != 1 && get_map_value(state,j-1,i) == couleur ){
+					c++;}
+
+                else if(i+1 < state->size && get_map_value(state,j,i+1) != 1 && get_map_value(state,j,i+1) == couleur ){
+					c++;
+				}
+
+                else if(i-1 >= 0 && get_map_value(state,j,i-1) != 1 && get_map_value(state,j,i-1) == couleur ){
+					c++;}
+            }
+        }
+    }
+	if (c == 0){
+		return 0; 
+	}
+
+    return 1;
+
 }
+
+int IA_aleatoire_mieux(GameState* state, int num_joueur){
+	while(1){
+		srand(time(NULL));
+		int nb_color=7;
+		int indice = (rand() % nb_color)+3;
+		if (is_adj(state, num_joueur, indice)==1){
+		return indice;}
+	}
+}
+
+
 
 void jouer_a_2(int size)
 {
@@ -287,5 +329,5 @@ int main(int argc, char** argv)
 */
 int main(int argc, char** argv)
 {
-	jouer_IA(5,IA_aleatoire);
+	jouer_IA(5,IA_aleatoire_mieux);
 }

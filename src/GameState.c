@@ -268,15 +268,16 @@ int IA_aleatoire_mieux(GameState* state, int num_joueur){
 	}
 }
 
-GameState copie_GS(GameState* state){
+GameState* copie_GS(GameState* state){
 
-	GameState copie;
+	
+	GameState* copie = (GameState*)malloc(sizeof(GameState));
 
-	copie.size=state->size;
-	GameState* copie_p=&copie;
-	int size=copie.size;
-	copie_p->map=(Color*) malloc(size*size*sizeof(Color));
-	memcpy(copie_p->map, state->map, size*size*sizeof(Color) );
+	copie->size=state->size;
+	
+	int size=copie->size;
+	copie->map=(Color*) malloc(size*size*sizeof(Color));
+	memcpy(copie->map, state->map, size*size*sizeof(Color) );
 
 	return copie;
 
@@ -305,12 +306,14 @@ int IA_glouton(GameState* state, int num_joueur)
 	int couleur=3;
 	int score =0;
 	for(int i=3; i<=9; i++){
-		GameState copie = copie_GS(state);
-		maj_coup(&copie,num_joueur,i);
-		if(eval_score(&copie,num_joueur)>score){
+		GameState* copie = copie_GS(state);
+		maj_coup(copie,num_joueur,i);
+		if(eval_score(copie,num_joueur)>score){
 			couleur=i;
-			score=eval_score(&copie,num_joueur);
+			score=eval_score(copie,num_joueur);
 		}
+		free(copie->map);
+		free(copie);
 	}
 		
 	
@@ -353,12 +356,14 @@ int IA_hegemonie(GameState* state, int num_joueur)
 	int couleur=3;
 	int frontiere =0;
 	for(int i=3; i<=9; i++){
-		GameState copie = copie_GS(state);
-		maj_coup(&copie,num_joueur,i);
-		if(eval_front(&copie,num_joueur)>frontiere){
+		GameState* copie = copie_GS(state);
+		maj_coup(copie,num_joueur,i);
+		if(eval_front(copie,num_joueur)>frontiere){
 			couleur=i;
-			frontiere=eval_front(&copie,num_joueur);
+			frontiere=eval_front(copie,num_joueur);
 		}
+		free(copie->map);
+		free(copie);
 	}
 		
 	
@@ -371,23 +376,27 @@ int IA_mixte(GameState* state, int num_joueur)
 	int couleur=0;
 	int frontiere =eval_front(state,num_joueur);
 	for(int i=3; i<=9; i++){
-		GameState copie = copie_GS(state);
-		maj_coup(&copie,num_joueur,i);
-		if(eval_front(&copie,num_joueur)>frontiere){
+		GameState* copie = copie_GS(state);
+		maj_coup(copie,num_joueur,i);
+		if(eval_front(copie,num_joueur)>frontiere){
 			couleur=i;
-			frontiere=eval_front(&copie,num_joueur);
+			frontiere=eval_front(copie,num_joueur);
 		}
+		free(copie->map);
+		free(copie);
 	}
 		
 	if (couleur==0){
 		int score =0;
 	for(int i=3; i<=9; i++){
-		GameState copie = copie_GS(state);
-		maj_coup(&copie,num_joueur,i);
-		if(eval_score(&copie,num_joueur)>score){
+		GameState* copie = copie_GS(state);
+		maj_coup(copie,num_joueur,i);
+		if(eval_score(copie,num_joueur)>score){
 			couleur=i;
-			score=eval_score(&copie,num_joueur);
+			score=eval_score(copie,num_joueur);
 		}
+		free(copie->map);
+		free(copie);
 	}
 	}
 	

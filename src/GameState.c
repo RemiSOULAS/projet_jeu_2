@@ -366,6 +366,34 @@ int IA_hegemonie(GameState* state, int num_joueur)
 	return couleur;
 }
 
+int IA_mixte(GameState* state, int num_joueur)
+{
+	int couleur=0;
+	int frontiere =eval_front(state,num_joueur);
+	for(int i=3; i<=9; i++){
+		GameState copie = copie_GS(state);
+		maj_coup(&copie,num_joueur,i);
+		if(eval_front(&copie,num_joueur)>frontiere){
+			couleur=i;
+			frontiere=eval_front(&copie,num_joueur);
+		}
+	}
+		
+	if (couleur==0){
+		int score =0;
+	for(int i=3; i<=9; i++){
+		GameState copie = copie_GS(state);
+		maj_coup(&copie,num_joueur,i);
+		if(eval_score(&copie,num_joueur)>score){
+			couleur=i;
+			score=eval_score(&copie,num_joueur);
+		}
+	}
+	}
+	
+	return couleur;
+}
+
 void jouer_a_2(int size)
 {
 	GameState state = {.map = NULL, .size = 0};
@@ -426,6 +454,6 @@ int main(int argc, char** argv)
 */
 int main(int argc, char** argv)
 {
-	jouer_IA(8,IA_hegemonie);
+	jouer_IA(8,IA_mixte);
 	
 }

@@ -318,6 +318,54 @@ int IA_glouton(GameState* state, int num_joueur)
 	return couleur;
 }
 
+int eval_front(GameState* state, int num_joueur){
+
+	int c=0;
+	for(int i = 0; i < state->size; i++)
+    {
+        for(int j = 0; j < state->size; j++)
+        {
+            if(get_map_value(state,j,i) == num_joueur)
+            {
+                if(j+1 < state->size && get_map_value(state,j+1,i) != 1 && get_map_value(state,j+1,i) != num_joueur ){
+					c++;}
+					
+
+                if(j-1 >= 0 && get_map_value(state,j-1,i) != 1 && get_map_value(state,j-1,i) != num_joueur ){
+					c++;}
+
+                if(i+1 < state->size && get_map_value(state,j,i+1) != 1 && get_map_value(state,j,i+1) != num_joueur ){
+					c++;
+				}
+
+                if(i-1 >= 0 && get_map_value(state,j,i-1) != 1 && get_map_value(state,j,i-1) != num_joueur ){
+					c++;}
+            }
+        }
+    }
+	
+    return c;
+
+}
+
+int IA_hegemonie(GameState* state, int num_joueur)
+{
+	int couleur=3;
+	int frontiere =0;
+	for(int i=3; i<=9; i++){
+		GameState copie = copie_GS(state);
+		maj_coup(&copie,num_joueur,i);
+		if(eval_front(&copie,num_joueur)>frontiere){
+			couleur=i;
+			frontiere=eval_front(&copie,num_joueur);
+		}
+	}
+		
+	
+	
+	return couleur;
+}
+
 void jouer_a_2(int size)
 {
 	GameState state = {.map = NULL, .size = 0};
@@ -378,6 +426,6 @@ int main(int argc, char** argv)
 */
 int main(int argc, char** argv)
 {
-	jouer_IA(8,IA_glouton);
+	jouer_IA(8,IA_hegemonie);
 	
 }

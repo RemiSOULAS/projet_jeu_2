@@ -217,7 +217,7 @@ void jouer_IA(int size, int(*f)(GameState*, int))
 	
 }
 int IA_aleatoire(GameState* state, int num_joueur){
-	srand(time(NULL));
+	
 	int nb_color=7;
 	int indice = (rand() % nb_color)+3;
 	return indice;
@@ -261,7 +261,6 @@ int is_adj(GameState* state,int nb_joueur, int couleur)
 
 int IA_aleatoire_mieux(GameState* state, int num_joueur){
 	while(1){
-		srand(time(NULL));
 		int nb_color=7;
 		int indice = (rand() % nb_color)+3;
 		if (is_adj(state, num_joueur, indice)==1){
@@ -359,7 +358,7 @@ int IA_hegemonie(GameState* state, int num_joueur)
 	for(int i=3; i<=9; i++){
 		GameState* copie = copie_GS(state);
 		maj_coup(copie,num_joueur,i);
-		if(eval_front(copie,num_joueur)>frontiere){
+		if(eval_front(copie,num_joueur)>frontiere && is_adj(state, num_joueur, i)==1){
 			couleur=i;
 			frontiere=eval_front(copie,num_joueur);
 		}
@@ -492,14 +491,34 @@ int main(int argc, char** argv)
 */
 int main(int argc, char** argv)
 {
+	/*
 	srand(time(NULL));
 	int c=0;
 	for(int i=1; i<=500; i++){
-		c=c+affrontement_IA(20,IA_glouton,IA_glouton);
-		printf("%i\n",c);
+		c=c+affrontement_IA(8,IA_hegemonie,IA_hegemonie);
 		
 	}
 	printf("%i\n",c);
+
+	
+	c=0;
+	for(int i=1; i<=500; i++){
+		c=c+affrontement_IA(15,IA_hegemonie,IA_hegemonie);
+		
+	}
+	printf("%i\n",c);
+
+	
+	c=0;
+	for(int i=1; i<=500; i++){
+		c=c+affrontement_IA(30,IA_hegemonie,IA_hegemonie);
+		
+	}
+	printf("%i\n",c);
+
+	*/
+
+	jouer_IA(10,IA_hegemonie);
 	
 	
 	

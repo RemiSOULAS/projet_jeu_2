@@ -25,7 +25,7 @@ Color get_map_value (GameState* state, int x, int y){
 
 void fill_map(GameState* map)
 {	
-	srand(time(NULL));
+	
 	int nb_color=7;
 	for(int i=0;i<=(map->size*map->size);i++)
 	{
@@ -51,6 +51,7 @@ void affiche(GameState* state)
 		}
 		printf("%i\n",get_map_value(state,state->size-1,i));
 	}
+	printf("\n");
 }
 
 void maj_coup(GameState* state, int joueur, int couleur)
@@ -440,6 +441,34 @@ void jouer_a_2(int size)
 	
 }
 
+int affrontement_IA(int size, int(*IA1)(GameState*, int),int(*IA2)(GameState*, int))
+{
+	GameState state = {.map = NULL, .size = 0};
+	GR8_create_empty_game_state(&state,size);
+	fill_map(&state);
+
+
+	while(is_finish(&state)==0)
+	{
+
+		maj_coup(&state,1,IA1(&state, 1));
+		if(is_finish(&state)!=0){
+			break;
+		}
+
+		maj_coup(&state,2,IA2(&state, 2));
+		
+	}
+	
+	if(is_finish(&state)==1){
+		return 1;
+	}
+	else{
+		return 0;
+	}
+	
+}
+
 /*
 int main(int argc, char** argv)
 {
@@ -463,6 +492,15 @@ int main(int argc, char** argv)
 */
 int main(int argc, char** argv)
 {
-	jouer_IA(8,IA_mixte);
+	srand(time(NULL));
+	int c=0;
+	for(int i=1; i<=500; i++){
+		c=c+affrontement_IA(20,IA_glouton,IA_glouton);
+		printf("%i\n",c);
+		
+	}
+	printf("%i\n",c);
+	
+	
 	
 }
